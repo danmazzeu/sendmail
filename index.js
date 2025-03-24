@@ -1,8 +1,8 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
-require("dotenv").config();
 const moment = require("moment-timezone");
+require("dotenv").config();
 
 const app = express();
 const PORT = 3000;
