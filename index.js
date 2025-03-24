@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 require("dotenv").config();
 
-const app = express(); // <-- Ensure app is defined here
+const app = express();
 const PORT = 3000;
 const API_KEY = process.env.API_KEY;
 
@@ -20,22 +20,21 @@ app.post("/", async (req, res) => {
         from, 
         to, 
         subject, 
-        text, 
-        html, 
+        message,
         tls 
     } = req.body;
 
     const missingFields = [];
     if (!apikey) missingFields.push("apikey");
     if (!port) missingFields.push("port");
-    if (ssl === undefined) missingFields.push("ssl");  // explicitly check for undefined (not null or false)
+    if (ssl === undefined) missingFields.push("ssl");  
     if (!smtp) missingFields.push("smtp");
     if (!email) missingFields.push("email");
     if (!password) missingFields.push("password");
     if (!from) missingFields.push("from");
     if (!to) missingFields.push("to");
     if (!subject) missingFields.push("subject");
-    if (!text && !html) missingFields.push("text or html");
+    if (!message) missingFields.push("message");
 
     if (missingFields.length > 0) {
         return res.status(400).json({ error: "Missing required fields", missingFields });
@@ -68,8 +67,8 @@ app.post("/", async (req, res) => {
             from: from,
             to: to,
             subject: subject,
-            text: text,
-            html: html
+            text: message, 
+            html: message
         };
 
         const info = await transporter.sendMail(mailOptions);
