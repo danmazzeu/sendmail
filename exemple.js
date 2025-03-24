@@ -1,5 +1,5 @@
 const testEmail = async () => {
-    const response = await fetch("http://localhost:3000/", {
+    const response = await fetch("https://sendmail-production-286f.up.railway.app/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -11,7 +11,7 @@ const testEmail = async () => {
             smtp: "smtp.gmail.com",
             email: "danmzzu@gmail.com",
             password: "krqq ozuv wwth ouwy",
-            from: "danmzzu@gmail.com",
+            from: '"Daniel Mazzeu" <danmzzu@gmail.com>',
             to: "danmzzu@gmail.com",
             subject: "Teste de API",
             text: "Este é um e-mail de teste enviado pela API." // Pode ser text ou html
