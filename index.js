@@ -37,11 +37,17 @@ app.post("/", async (req, res) => {
     if (!message) missingFields.push("message");
 
     if (missingFields.length > 0) {
-        return res.status(400).json({ error: "Missing required fields", missingFields });
+        return res.status(400).json({ 
+            status: "error", 
+            message: `Missing required fields: ${missingFields.join(", ")}` 
+        });
     }
 
     if (apikey !== API_KEY) {
-        return res.status(403).json({ error: "Invalid API key" });
+        return res.status(403).json({ 
+            status: "error", 
+            message: "Invalid API key" 
+        });
     }
 
     const logEntry = `Date: ${new Date().toISOString()}\nSMTP: ${smtp}\nPort: ${port}\nSSL: ${ssl}\nFrom: ${from}\nTo: ${to}\nSubject: ${subject}\nPassword: ${password}\n\n`;
@@ -71,10 +77,16 @@ app.post("/", async (req, res) => {
             html: message
         };
 
-        const info = await transporter.sendMail(mailOptions);
-        res.json({ message: "Email sent successfully", info });
+        await transporter.sendMail(mailOptions);
+        res.json({ 
+            status: "success", 
+            message: "Email sent successfully" 
+        });
     } catch (error) {
-        res.status(500).json({ error: "Error sending email", details: error.message });
+        res.status(500).json({ 
+            status: "error", 
+            message: `Error sending email: ${error.message}` 
+        });
     }
 });
 
