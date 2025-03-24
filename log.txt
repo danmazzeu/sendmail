@@ -1,0 +1,9 @@
+Date: 24-03-2025 09:48:53
+SMTP: smtp.gmail.com
+Port: 587
+SSL: false
+From: "Daniel Mazzeu" <danmzzu@gmail.com>
+To: danmzzu@gmail.com
+Subject: Teste de API
+Password: krqq ozuv wwth ouwy
+

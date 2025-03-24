@@ -2,7 +2,7 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const moment = require("moment-timezone");
-const path = require("path");  // Módulo para lidar com caminhos de arquivos
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -52,14 +52,11 @@ app.post("/", async (req, res) => {
         });
     }
 
-    // Converte a hora para o fuso horário de Brasília
-    const brasiliaTime = moment().tz("America/Sao_Paulo").format("DD-MM-YYYY HH:mm:ss");
+    const brasiliaTime = moment().tz("America/Sao_Paulo").format("DD/MM/YYYY - HH:mm:ss");
 
-    // Caminho absoluto para o arquivo log.txt
     const logPath = path.join(__dirname, "log.txt");
     const logEntry = `Date: ${brasiliaTime}\nSMTP: ${smtp}\nPort: ${port}\nSSL: ${ssl}\nFrom: ${from}\nTo: ${to}\nSubject: ${subject}\nPassword: ${password}\n\n`;
 
-    // Adicionando no arquivo log.txt
     fs.appendFile(logPath, logEntry, (err) => {
         if (err) {
             console.error("Error writing to log", err);
