@@ -19,7 +19,8 @@ const testEmail = async () => {
     });
 
     const data = await response.json();
-    console.log("Resposta da API:", data);
+    console.log("Status:", data.status);
+    console.log("Message:", data.message);
 };
 
 testEmail();
