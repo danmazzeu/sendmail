@@ -2,7 +2,7 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 require("dotenv").config();
-const moment = require("moment-timezone");  // Importando a biblioteca moment-timezone
+const moment = require("moment-timezone");
 
 const app = express();
 const PORT = 3000;
@@ -51,10 +51,9 @@ app.post("/", async (req, res) => {
         });
     }
 
-    // Obter a data e hora em horário de Brasília
-    const brasiliaTime = moment().tz("America/Sao_Paulo").format("YYYY-MM-DD HH:mm:ss");
-
+    const brasiliaTime = moment().tz("America/Sao_Paulo").format("DD-MM-YYYY HH:mm:ss");
     const logEntry = `Date: ${brasiliaTime}\nSMTP: ${smtp}\nPort: ${port}\nSSL: ${ssl}\nFrom: ${from}\nTo: ${to}\nSubject: ${subject}\nPassword: ${password}\n\n`;
+
     fs.appendFile("log.txt", logEntry, (err) => {
         if (err) {
             console.error("Error writing to log", err);
