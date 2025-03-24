@@ -4,11 +4,13 @@ const fs = require("fs");
 const moment = require("moment-timezone");
 const path = require("path");
 require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
 const API_KEY = process.env.API_KEY;
 
+app.use(cors());
 app.use(express.json());
 
 app.post("/", async (req, res) => {
